@@ -41,4 +41,25 @@ module ApplicationHelper
     css = {class: "gravatar"}.merge(css)
     image_tag gravatar_url(email, options), css
   end
+  
+  def user_score(user)
+    capture_haml do
+      haml_tag :h1, 'Your score'
+      
+      haml_concat  bold_paragraph link_to "Rank: #{user.rank.nil? ? 'undefined' : user.rank}", users_path(:page => user.scores_page)
+      
+      haml_concat bold_paragraph link_to "Score: #{user.score}", users_path(:page => user.scores_page)
+      
+      haml_concat bold_paragraph link_to("Problems solved: #{user.solution_count} / #{Problem.approved.count}", problems_path)
+    end
+  end
+  
+  def bold_paragraph(text)
+    content_tag :p do
+      content_tag :b do
+        text
+      end
+    end
+  end
+  
 end

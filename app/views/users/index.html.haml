@@ -9,7 +9,7 @@
       %th Follow
   - @users.each_with_index do |user, i|
     %tr{:class => "user-record #{'self' if user == current_user}", :id => user.id}
-      %td= i + 1 + offset
+      %td= user.rank || 'undefined'
       %td.user
         = gravatar_image(user.email, 24, style: "margin-right: 0.5em")
         = user.username
