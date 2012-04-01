@@ -1,0 +1,24 @@
+%h1 Scoreboard
+%table#users
+  %tr
+    %th Rank
+    %th User
+    %th Problems Solved
+    %th Score
+    - if current_user
+      %th Follow
+  - @users.each_with_index do |user, i|
+    %tr{:class => "user-record #{'self' if user == current_user}", :id => user.id}
+      %td= i+1 + offset
+      %td.user
+        = gravatar_image(user.email, 24, style: "margin-right: 0.5em")
+        = user.username
+      %td= user.solution_count || 0
+      %td= user.score || 0
+      - if current_user
+        %td.follow
+          - unless user == current_user
+            = link_to "Follow", "#", class: (current_user.following?(user) ? "no-display" : "")
+            = link_to "Unfollow", "#", class: (current_user.following?(user) ? "" : "no-display")
+= paginate @users
+.clear

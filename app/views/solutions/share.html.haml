@@ -1,0 +1,10 @@
+%h1 Go Ahead And Boast A Little
+#share
+  %h2 Direct Link to Share
+  %p.refheap
+    = text_field_tag "share_link", @paste, id: "solution-share-link"
+  %h2.twitter Share on Twitter
+  %p You'll be able to edit your tweet before it's posted. Click the link below to go to Twitter.
+  %p= twitter_link(@problem, @paste)
+  .links
+    = link_to "Back to Problem", problem_path(@problem)

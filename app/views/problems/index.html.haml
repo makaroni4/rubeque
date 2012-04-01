@@ -1,0 +1,38 @@
+%h1
+  = 'Unapproved ' if (params[:action] == 'unapproved')
+  Problems
+%table#problems
+  %thead
+    %tr
+      %th Title
+      %th Tags
+      %th Difficulty
+      %th Solutions
+      %th Submitter
+      - if current_user
+        %th Score
+        %th Solved
+  %tbody
+    - @problems.each do |problem|
+      %tr{:class => "problem #{'solved' if current_user && current_user.solved_problems[problem.id]}", :id => problem.id}
+        %td= link_to problem.title, problem
+        %td= problem.tag_list
+        %td= problem.difficulty_word
+        %td= problem.solutions.count
+        %td= problem.creator
+        - if current_user
+          %td= current_user.solved_problem_scores[problem.id]
+          %td.solved-mark= current_user.solved_problems[problem.id] ? image_tag("check.png") : ""
+.clear
+= content_tag "div", class: "links" do
+- if current_user
+  = link_to 'Submit a problem', new_problem_path, id: 'new_problem'
+  |
+- if current_user_admin?
+  - if params[:action] == "unapproved"
+    = link_to "Back to Problems", problems_path()
+    |
+  - else
+    = link_to "View Unapproved Problems", unapproved_problems_path()
+    |
+= link_to "RSS Feed", rss_problems_path(format: :xml), class: "rss"

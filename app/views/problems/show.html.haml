@@ -1,0 +1,56 @@
+%h1= @problem.title
+- if current_user_admin?
+  %p
+    %b Status:
+    %br/
+    = @problem.status.titleize
+- if @problem.creator.present?
+  %p
+    %b Submitted By:
+    %br/
+    = @problem.creator
+%p
+  %b Difficulty:
+  %br/
+  = @problem.difficulty_word
+- if @problem.tags.any?
+  %p
+    %b Tags:
+    %br/
+    = @problem.tag_list
+- if !@problem.instructions.blank?
+  %p
+    %b Instructions:
+    %br/
+    = @problem.approved? ? raw(Rinku.auto_link(@problem.instructions)) : @problem.instructions
+- if !@problem.hidden_code.blank?
+  %p
+    %b Hidden Code:
+    %br/
+    There is hidden code with assertions that is also being run to test out your code.
+- if @problem.excluded_methods && @problem.excluded_methods.any?
+  %p
+    %b Banned Methods:
+    %br/
+    = @problem.excluded_methods.join(", ")
+%div
+  %b Code:
+  = raw highlight_code(@problem.code)
+%h2 Your Solution
+- if @problem.solved?(current_user) || current_user_admin?
+  %p#solutions-link
+    = link_to "View Solutions", problem_solutions_path(:problem_id => @problem.id)
+= form_for [@problem, @solution] do |f|
+  = form_errors @solution
+  = f.hidden_field :problem_id
+  .field.code-editor-field
+    = f.text_area :code
+    #editor.code-editor
+  .clear
+  = f.submit "Submit", confirm: (@solution.new_record? ? "" : "You've already solved this problem. Are you sure you want to change your solution?")
+%br/
+= link_to "Back to Problems", problems_path()
+- if current_user_admin?
+  - if !@problem.approved
+    | #{link_to 'Approve', approve_problem_path(@problem), method: :put, confirmation: "Are you sure you want to approve this problem?"}
+  | #{link_to 'Edit', edit_problem_path(@problem)} | #{link_to 'Destroy', @problem, confirm: "Are you sure you want to destroy?", method: :delete}

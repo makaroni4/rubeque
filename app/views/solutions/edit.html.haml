@@ -1,0 +1,6 @@
+%h1 Editing solution
+= render 'form'
+- if current_user_admin?
+  = link_to "Destroy", [@solution.problem, @solution], method: :delete, confirm: "Are you sure you want to destroy this solution?"
+  |
+= link_to 'Back to Problem', @solution.problem

@@ -1,0 +1,51 @@
+= form_for(@problem) do |f|
+  - if @problem.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@problem.errors.count, "error")
+        prohibited this problem from being saved:
+      %ul
+        - @problem.errors.full_messages.each do |msg|
+          %li= msg
+  %p
+    Need help? Check out our #{link_to "problem submission help page", submission_help_path, class: "new-window", target: "_blank"}.
+  .field
+    = f.label :title
+    %br/
+    = f.text_field :title
+  - if current_user_admin?
+    .field
+      = f.label :approved
+      %br/
+      = f.check_box :approved
+  .field
+    = f.label :difficulty
+    %br/
+    = f.select :difficulty, difficulty_options, {}, style: "width: 315px"
+  - if current_user.admin?
+    .field
+      = f.label :order_number, 'Order'
+      %br/
+      = f.text_field :order_number
+  .field
+    = f.label :tag_list, "Tags"
+    = f.text_field :tag_list, class: "tag-field"
+  .field{:style => "position: relative"}
+    = f.label :instructions
+    %span.small{:style => "display: block; position: absolute; top: -1px; left: 115px; float: left;"} (html is allowed)
+    %br/
+    = f.text_area :instructions, style: "margin-top: 5px;"
+  .field.code-editor-field
+    = f.label :code
+    %br/
+    = f.text_area :code
+    #code_editor.code-editor
+  .clear
+  .field.code-editor-field
+    = f.label :hidden_code, "Hidden Code and Assertions"
+    %br/
+    = f.text_area :hidden_code
+    #hidden_code_editor.code-editor
+  .clear
+  .actions
+    = f.submit

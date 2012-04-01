@@ -1,0 +1,32 @@
+%h1
+  Change #{@audit.id}
+%p
+  %b Object
+  %br/
+  = @audit.association_chain.first["name"]
+  \##{@audit.association_chain.first["id"]}
+%p
+  %b Action
+  %br/
+  = @audit.action
+%p
+  %b Changes
+  %br/
+  %table
+    %tr
+      %th Field
+      %th Old Value
+      %th New Value
+    - @audit.modified.each do |k, v|
+      %tr
+        %td= k
+        %td= @audit.original[k]
+        %td= v
+%p
+  %b Modifier
+  %br/
+  = @audit.modifier
+%p
+  %b Action
+  %br/
+  = @audit.created_at
