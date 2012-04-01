@@ -1,5 +1,5 @@
 %h1
-  = 'Unapproved ' if (params[:action] == 'unapproved')
+  = 'Unapproved ' if params[:action] == 'unapproved'
   Problems
 %table#problems
   %thead
@@ -25,14 +25,14 @@
           %td.solved-mark= current_user.solved_problems[problem.id] ? image_tag("check.png") : ""
 .clear
 = content_tag "div", class: "links" do
-- if current_user
-  = link_to 'Submit a problem', new_problem_path, id: 'new_problem'
-  |
-- if current_user_admin?
-  - if params[:action] == "unapproved"
-    = link_to "Back to Problems", problems_path()
+  - if current_user
+    = link_to 'Submit a problem', new_problem_path, id: 'new_problem'
     |
-  - else
-    = link_to "View Unapproved Problems", unapproved_problems_path()
-    |
-= link_to "RSS Feed", rss_problems_path(format: :xml), class: "rss"
+  - if current_user_admin?
+    - if params[:action] == "unapproved"
+      = link_to "Back to Problems", problems_path()
+      |
+    - else
+      = link_to "View Unapproved Problems", unapproved_problems_path()
+      |
+  = link_to "RSS Feed", rss_problems_path(format: :xml), class: "rss"
