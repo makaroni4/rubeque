@@ -43,15 +43,12 @@ module ApplicationHelper
   end
   
   def user_score(user)
-    capture_haml do
-      haml_tag :h1, 'Your score'
-      
-      haml_concat  bold_paragraph link_to "Rank: #{user.rank.nil? ? 'undefined' : user.rank}", users_path(:page => user.scores_page)
-      
-      haml_concat bold_paragraph link_to "Score: #{user.score}", users_path(:page => user.scores_page)
-      
-      haml_concat bold_paragraph link_to("Problems solved: #{user.solution_count} / #{Problem.approved.count}", problems_path)
-    end
+    output = ''
+    output << content_tag(:h1, 'Your score')
+    output << bold_paragraph(link_to "Rank: #{user.rank.nil? ? 'undefined' : user.rank}", users_path(:page => user.scores_page))
+    output << bold_paragraph(link_to "Score: #{user.score}", users_path(:page => user.scores_page))
+    output << bold_paragraph(link_to "Problems solved: #{user.solution_count} / #{Problem.approved.count}", problems_path)
+    output.html_safe
   end
   
   def bold_paragraph(text)
